@@ -11,9 +11,9 @@ import Hasyakanika from "./components/Hasyakanika";
 import AdminLogin from "./components/Admin/AdminLogin";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import ContactUs from "./components/contactUs";
-import { setupAuthListener } from "./firebase/authListener";  // Firebase Auth listener
-import { auth } from "./firebase/config"; // Import auth service from Firebase
-// test
+import { setupAuthListener } from "./firebase/authListener"; // Firebase Auth listener
+import { auth } from "./firebase/config"; // Firebase Auth service
+
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -43,13 +43,16 @@ const App = () => {
         <Route path="/geet" element={<Geet />} />
         <Route path="/hasyakanika" element={<Hasyakanika />} />
         <Route path="/admin" element={<AdminLogin />} />
-        
-        {/* Protected Admin Dashboard Route */}
-        <Route path="/admin/dashboard" element={
-          <ProtectedRoute>
-            <AdminDashboard />
-          </ProtectedRoute>
-        } />
+
+        {/* Updated Protected Admin Dashboard Route */}
+        <Route
+          path="/admin/dashboard/*"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="/contact" element={<ContactUs />} />
       </Routes>

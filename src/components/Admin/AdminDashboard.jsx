@@ -1,34 +1,18 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { logoutAdmin } from "../../firebase/config";
+import { Link, Routes, Route } from "react-router-dom";
+import ImageManager from "./ImageManager";
+import ContentManager from "./ContentManager";
 
 const AdminDashboard = () => {
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    const { error } = await logoutAdmin();
-    if (!error) {
-      navigate("/"); // Redirect to Home page
-    } else {
-      console.error("Logout Error:", error);
-    }
-  };
-
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Content Management</h1>
-        <button
-          onClick={handleLogout}
-          className="py-2 px-4 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition duration-300"
-        >
-          Logout
-        </button>
-      </div>
-      {/* Content Management UI */}
-      <div>
-        <p>Manage content here...</p>
-      </div>
+    <div className="admin-dashboard">
+      <nav className="flex space-x-4 p-4 bg-gray-100">
+        <Link to="/admin/dashboard/images" className="font-bold text-blue-600">Image Manager</Link>
+        <Link to="/admin/dashboard/content" className="font-bold text-blue-600">Content Manager</Link>
+      </nav>
+      <Routes>
+        <Route path="images" element={<ImageManager />} />
+        <Route path="content" element={<ContentManager />} />
+      </Routes>
     </div>
   );
 };
