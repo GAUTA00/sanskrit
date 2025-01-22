@@ -1,4 +1,4 @@
-import React from "react";
+import "react";
 import { useParams } from "react-router-dom";
 import ImageDisplay from "./ImageDisplay.jsx"; // Path to the ImageDisplay component
 
