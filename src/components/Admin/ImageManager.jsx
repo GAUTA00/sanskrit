@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { firestore } from "../../firebase/config"; // Firebase configuration
-import { doc, setDoc } from "firebase/firestore"; // Use setDoc to define path directly
+import { collection, addDoc } from "firebase/firestore"; // Use addDoc to auto-generate IDs
 
 const ImageUploader = () => {
   const [image, setImage] = useState(null);
   const [text, setText] = useState("");
   const [explanation, setExplanation] = useState("");
-  const [path, setPath] = useState(""); // The dynamic path, e.g., 'shlok/1'
+  const [category, setCategory] = useState(""); // Selected category (shlok, mantra, etc.)
   const [uploading, setUploading] = useState(false);
 
   const handleFileChange = (e) => {
@@ -16,12 +16,12 @@ const ImageUploader = () => {
       reader.onloadend = () => {
         setImage(reader.result); // Convert to base64 string
       };
-      reader.readAsDataURL(file); // Read file as a data URL
+      reader.readAsDataURL(file);
     }
   };
 
   const handleUpload = async () => {
-    if (!image || !text || !explanation || !path) {
+    if (!image || !text || !explanation || !category) {
       alert("Please fill in all fields and select an image!");
       return;
     }
@@ -29,23 +29,28 @@ const ImageUploader = () => {
     try {
       setUploading(true);
 
-      // Document reference for a dynamic path like 'shlok/1'
-      const docRef = doc(firestore, "images", path);  // Use path as the document ID
+      // Store under the selected category (shlok, mantra, katha, etc.)
+      const collectionRef = collection(firestore, category);
 
-      // Save the image, text, and explanation under the specific path
-      await setDoc(docRef, {
+      // Auto-generate document ID inside the selected category
+      const docRef = await addDoc(collectionRef, {
         imageData: image,
         text: text,
         explanation: explanation,
         timestamp: new Date(),
       });
 
-      console.log("Document successfully written to:", docRef.id);
+      console.log(`Document stored under '${category}' with ID: ${docRef.id}`);
       alert("Image successfully uploaded to Firestore!");
+      setImage(null);
+      setText("");
+      setExplanation("");
+      setCategory("");
     } catch (error) {
       console.error("Error uploading image to Firestore: ", error);
     } finally {
       setUploading(false);
+
     }
   };
 
@@ -54,45 +59,52 @@ const ImageUploader = () => {
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
         Upload Image and Description
       </h2>
-      
+
       <div>
         {/* File input */}
-        <input 
-          type="file" 
-          onChange={handleFileChange} 
+        <input
+          type="file"
+          onChange={handleFileChange}
           className="block w-full p-3 mb-4 bg-white border border-gray-300 rounded-md"
         />
 
         {/* Text input */}
-        <input 
-          type="text" 
-          placeholder="Enter Title Text" 
+        <input
+          type="text"
+          placeholder="Enter Title Text"
           value={text}
-          onChange={(e) => setText(e.target.value)} 
+          onChange={(e) => setText(e.target.value)}
           className="block w-full p-3 mb-4 bg-white border border-gray-300 rounded-md"
         />
 
         {/* Explanation textarea */}
-        <textarea 
-          placeholder="Enter explanation Text" 
+        <textarea
+          placeholder="Enter explanation Text"
           value={explanation}
-          onChange={(e) => setExplanation(e.target.value)} 
+          onChange={(e) => setExplanation(e.target.value)}
           className="block w-full p-3 mb-4 bg-white border border-gray-300 rounded-md"
         />
 
-        {/* Path input (e.g., shlok/1) */}
-        <input
-          type="text"
-          placeholder="Enter Path (e.g., 'shlok/1')"
-          value={path}
-          onChange={(e) => setPath(e.target.value)}
+        {/* Category dropdown */}
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
           className="block w-full p-3 mb-6 bg-white border border-gray-300 rounded-md"
-        />
+        >
+          <option value="">Select Category</option>
+          <option value="shlok">Shlok</option>
+          <option value="mantra">Mantra</option>
+          <option value="katha">Katha</option>
+          <option value="geet">Geet</option>
+          <option value="hasyakanika">Hasyakanika</option>
+          <option value="katha">Katha</option>
+
+        </select>
 
         {/* Upload button */}
-        <button 
-          onClick={handleUpload} 
-          disabled={uploading} 
+        <button
+          onClick={handleUpload}
+          disabled={uploading}
           className="w-full p-3 text-white bg-blue-500 rounded-md hover:bg-blue-600 disabled:bg-gray-400 transition"
         >
           {uploading ? "Uploading..." : "Upload"}

@@ -13,7 +13,10 @@ import AdminDashboard from "./components/Admin/AdminDashboard";
 import ContactUs from "./components/contactUs";
 import { setupAuthListener } from "./firebase/authListener"; // Firebase Auth listener
 import { auth } from "./firebase/config"; // Firebase Auth service
-
+import GeetDetail from "./components/GeetDetail";
+import MantraDetail from "./components/MantraDetail";
+import KathaDetail from "./components/KathaDetail";
+import HasyakanikaDetail from "./components/HasyakanikaDetail";
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -39,9 +42,14 @@ const App = () => {
         <Route path="/shlok" element={<Shlok />} />
         <Route path="/shlok/:id" element={<ShlokDetail />} />
         <Route path="/mantra" element={<Mantra />} />
+        <Route path="/mantra/:id" element={<MantraDetail />} />
         <Route path="/katha" element={<Katha />} />
+        <Route path="/katha/:id" element={<KathaDetail />} />
         <Route path="/geet" element={<Geet />} />
+        <Route path="/geet/:id" element={<GeetDetail/>} /> {/* Ensure this exists */}
         <Route path="/hasyakanika" element={<Hasyakanika />} />
+        <Route path="/hasyakanika/:id" element={<HasyakanikaDetail />} />
+
         <Route path="/admin" element={<AdminLogin />} />
 
         {/* Updated Protected Admin Dashboard Route */}
