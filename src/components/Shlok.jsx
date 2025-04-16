@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { firestore } from "../firebase/config"; // Firestore configuration
 import { collection, getDocs } from "firebase/firestore";
 
+
+
 const Shlok = () => {
   const [shlokas, setShlokas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +33,7 @@ const Shlok = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-900 to-black text-white">
       <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold text-center mb-8">Sarvam Shlok</h1>
+        <h1 className="text-3xl font-bold text-center mb-8">श्लोक</h1>
 
         {loading ? (
           <p className="text-center text-gray-300">Loading...</p>

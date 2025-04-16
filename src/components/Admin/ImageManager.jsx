@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { firestore } from "../../firebase/config"; // Firebase configuration
-import { collection, addDoc } from "firebase/firestore"; // Use addDoc to auto-generate IDs
+import { firestore } from "../../firebase/config";
+import { collection, addDoc } from "firebase/firestore";
 
 const ImageUploader = () => {
   const [image, setImage] = useState(null);
   const [text, setText] = useState("");
   const [explanation, setExplanation] = useState("");
-  const [category, setCategory] = useState(""); // Selected category (shlok, mantra, etc.)
+  const [category, setCategory] = useState("");
   const [uploading, setUploading] = useState(false);
 
   const handleFileChange = (e) => {
@@ -14,7 +14,7 @@ const ImageUploader = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result); // Convert to base64 string
+        setImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -28,29 +28,28 @@ const ImageUploader = () => {
 
     try {
       setUploading(true);
-
-      // Store under the selected category (shlok, mantra, katha, etc.)
       const collectionRef = collection(firestore, category);
 
-      // Auto-generate document ID inside the selected category
       const docRef = await addDoc(collectionRef, {
         imageData: image,
-        text: text,
-        explanation: explanation,
+        text,
+        explanation,
         timestamp: new Date(),
       });
 
-      console.log(`Document stored under '${category}' with ID: ${docRef.id}`);
-      alert("Image successfully uploaded to Firestore!");
+      console.log(`Document added in '${category}' with ID: ${docRef.id}`);
+      alert("Upload successful!");
+
+      // Reset form
       setImage(null);
       setText("");
       setExplanation("");
       setCategory("");
     } catch (error) {
       console.error("Error uploading image to Firestore: ", error);
+      alert("Upload failed.");
     } finally {
       setUploading(false);
-
     }
   };
 
@@ -97,8 +96,7 @@ const ImageUploader = () => {
           <option value="katha">Katha</option>
           <option value="geet">Geet</option>
           <option value="hasyakanika">Hasyakanika</option>
-          <option value="katha">Katha</option>
-
+          <option value="sentencewords">Sentence Words</option>
         </select>
 
         {/* Upload button */}

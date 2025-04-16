@@ -7,7 +7,7 @@ import ShlokDetail from "./components/ShlokDetail";
 import Mantra from "./components/Mantra";
 import Katha from "./components/Katha";
 import Geet from "./components/Geet";
-import Hasyakanika from "./components/Hasyakanika";
+// import Hasyakanika from "./components/Hasyakanika";
 import AdminLogin from "./components/Admin/AdminLogin";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import ContactUs from "./components/contactUs";
@@ -16,7 +16,9 @@ import { auth } from "./firebase/config"; // Firebase Auth service
 import GeetDetail from "./components/GeetDetail";
 import MantraDetail from "./components/MantraDetail";
 import KathaDetail from "./components/KathaDetail";
-import HasyakanikaDetail from "./components/HasyakanikaDetail";
+// import HasyakanikaDetail from "./components/HasyakanikaDetail";
+import SentencesAndWords from "./components/SentencesAndWords";
+import WordSentenceDetail from "./components/SentenceAndWordsDetails";
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -46,9 +48,15 @@ const App = () => {
         <Route path="/katha" element={<Katha />} />
         <Route path="/katha/:id" element={<KathaDetail />} />
         <Route path="/geet" element={<Geet />} />
-        <Route path="/geet/:id" element={<GeetDetail/>} /> {/* Ensure this exists */}
-        <Route path="/hasyakanika" element={<Hasyakanika />} />
-        <Route path="/hasyakanika/:id" element={<HasyakanikaDetail />} />
+        <Route path="/geet/:id" element={<GeetDetail />} /> {/* Ensure this exists */}
+        {/* <Route path="/hasyakanika" element={<Hasyakanika />} /> */}
+        {/* <Route path="/hasyakanika/:id" element={<HasyakanikaDetail />} /> */}
+
+        <Route path="/sentenceandwords" element={<SentencesAndWords />} />
+        <Route path="/sentenceandwords/:id" element={<WordSentenceDetail />} />
+
+
+        {/* Updated Admin Login Route */}
 
         <Route path="/admin" element={<AdminLogin />} />
 
