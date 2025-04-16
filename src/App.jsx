@@ -10,7 +10,7 @@ import Geet from "./components/Geet";
 // import Hasyakanika from "./components/Hasyakanika";
 import AdminLogin from "./components/Admin/AdminLogin";
 import AdminDashboard from "./components/Admin/AdminDashboard";
-import ContactUs from "./components/contactUs";
+import ContactUs from "./components/ContactUs";
 import { setupAuthListener } from "./firebase/authListener"; // Firebase Auth listener
 import { auth } from "./firebase/config"; // Firebase Auth service
 import GeetDetail from "./components/GeetDetail";
