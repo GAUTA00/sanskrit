@@ -6,7 +6,6 @@ import { collection, getDocs } from "firebase/firestore";
 const Geet = () => {
   const [geets, setGeets] = useState([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchGeets = async () => {
       try {
