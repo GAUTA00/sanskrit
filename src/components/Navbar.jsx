@@ -23,15 +23,19 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 w-full bg-gradient-to-r from-amber-100 to-orange-100 py-3 px-6 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="group flex items-center">
-          <motion.h1
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-3xl md:text-4xl font-mukta font-bold text-amber-800 group-hover:text-amber-700 transition-colors"
+            className="flex items-center group-hover:opacity-90 transition-opacity"
           >
-            Mission
-            <span className="text-amber-600">संस्कृत</span>
-          </motion.h1>
+            <img
+              src="public\missionsanskritClaude.svg"
+              alt="Mission संस्कृत"
+              className="h-12 md:h-14"
+
+            />
+          </motion.div>
         </Link>
 
         {/* Desktop Navigation */}
@@ -62,6 +66,8 @@ const Navbar = () => {
             );
           })}
         </div>
+        {/* 
+        Rest of the navbar code remains unchanged */}
 
         {/* Mobile Menu Button */}
         <motion.div
