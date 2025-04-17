@@ -8,14 +8,14 @@ const Navbar = () => {
   const location = useLocation();
 
   const navItems = [
-    { path: "/", label: "Home" },
+    { path: "/", label: "गृहम्‌" },
     { path: "/shlok", label: "सुभाषितानि" },
     { path: "/mantra", label: "मन्त्राणि" },
     { path: "/katha", label: "कथा:" },
-    { path: "/geet", label: "Geet" },
+    { path: "/geet", label: "गीतमञ्जरी" },
     // { path: "/hasyakanika", label: "Hasyakanika" },
     { path: "/sentenceandwords", label: "Sentences & Words" },
-    { path: "/contact", label: "Contact" },
+    { path: "/contact", label: "संपर्कः" },
     { path: "/admin", label: "Admin" }
   ];
 
@@ -30,7 +30,7 @@ const Navbar = () => {
             className="flex items-center group-hover:opacity-90 transition-opacity"
           >
             <img
-              src="missionsanskritClaude.svg"
+              src="/missionsanskritClaude.svg"
               alt="Mission संस्कृत"
               className="h-12 md:h-14"
 
