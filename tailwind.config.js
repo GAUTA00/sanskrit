@@ -5,7 +5,12 @@ export default {
     './src/**/*.{js,ts,jsx,tsx}', // Include all relevant source files
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        mukta: ['Mukta', 'sans-serif'],
+        khand: ['Khand', 'sans-serif'],
+      }
+    },
   },
   plugins: [],
 };

@@ -1,69 +1,115 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   const navItems = [
     { path: "/", label: "Home" },
-    { path: "/shlok", label: "श्लोक" },
-    { path: "/mantra", label: "Mantra" },
-    { path: "/katha", label: "Katha" },
+    { path: "/shlok", label: "सुभाषितानि" },
+    { path: "/mantra", label: "मन्त्राणि" },
+    { path: "/katha", label: "कथा:" },
     { path: "/geet", label: "Geet" },
     // { path: "/hasyakanika", label: "Hasyakanika" },
-    { path: "/sentenceandwords", label: "Sentences&Words" },
+    { path: "/sentenceandwords", label: "Sentences & Words" },
     { path: "/contact", label: "Contact" },
     { path: "/admin", label: "Admin" }
   ];
 
-  const navLinkClasses = "text-xl font-bold text-black hover:text-green-600 transform hover:scale-110 transition-transform duration-300";
-
   return (
-    <nav className="w-full bg-[#FFCC99] text-white py-4 px-8 shadow-lg">
+    <nav className="sticky top-0 z-50 w-full bg-gradient-to-r from-amber-100 to-orange-100 py-3 px-6 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-4xl font-extrabold text-black">संस्कृत Learning</h1>
+        <Link to="/" className="group flex items-center">
+          <motion.h1
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-3xl md:text-4xl font-mukta font-bold text-amber-800 group-hover:text-amber-700 transition-colors"
+          >
+            Mission
+            <span className="text-amber-600">संस्कृत</span>
+          </motion.h1>
+        </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-12">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={navLinkClasses}
-            >
-              {item.label}
-            </Link>
-          ))}
+        <div className="hidden md:flex space-x-8">
+          {navItems.map((item, index) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <motion.div
+                key={item.path}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index, duration: 0.4 }}
+              >
+                <Link
+                  to={item.path}
+                  className={`relative px-1 py-2 font-mukta font-bold text-lg ${isActive ? 'text-amber-800' : 'text-amber-700 hover:text-amber-900'
+                    } transition-colors duration-200`}
+                >
+                  {item.label}
+                  {isActive && (
+                    <motion.span
+                      layoutId="underline"
+                      className="absolute left-0 top-full block h-0.5 w-full bg-amber-500"
+                    />
+                  )}
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center">
-          <button onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="md:hidden flex items-center"
+        >
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+            className="p-2 rounded-full bg-amber-200 hover:bg-amber-300 transition-colors"
+          >
             {isOpen ? (
-              <FaTimes className="w-6 h-6 text-black" />
+              <FaTimes className="w-6 h-6 text-amber-800" />
             ) : (
-              <FaBars className="w-6 h-6 text-black" />
+              <FaBars className="w-6 h-6 text-amber-800" />
             )}
           </button>
-        </div>
+        </motion.div>
       </div>
 
       {/* Mobile Navigation */}
-      <div className={`md:hidden ${isOpen ? 'block' : 'hidden'} bg-[#FFCC99] mt-2`}>
-        <div className="flex flex-col items-center space-y-4">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`${navLinkClasses} py-2 px-4`}
-              onClick={() => setIsOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      </div>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.3 }}
+          className="md:hidden bg-gradient-to-b from-amber-100 to-orange-100 mt-2 rounded-lg shadow-inner"
+        >
+          <div className="flex flex-col items-center py-4 space-y-3">
+            {navItems.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`py-2 px-4 w-full text-center text-lg font-mukta font-bold ${isActive ? 'text-amber-800 bg-amber-200/50' : 'text-amber-700 hover:bg-amber-200/30'
+                    } transition-colors rounded-md`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
     </nav>
   );
 };
