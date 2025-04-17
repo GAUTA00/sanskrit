@@ -1,9 +1,72 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { FaFacebook, FaTwitter, FaInstagram, FaYoutube, FaWhatsapp } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaFacebook, FaTwitter, FaInstagram, FaYoutube, FaWhatsapp, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { collection, getDocs, query, orderBy, limit, getFirestore } from 'firebase/firestore';
+import { getApp } from 'firebase/app';
+
+const db = getFirestore(getApp());
 
 const Home = () => {
+  const [currentPhrase, setCurrentPhrase] = useState({
+    sanskrit: "संस्कृतं वद आधुनिको भव",
+    english: "Speak Sanskrit and be modern"
+  });
+  const [phrases, setPhrases] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Fetch phrases from Firestore
+  useEffect(() => {
+    const fetchPhrases = async () => {
+      try {
+        const phrasesRef = collection(db, 'phrases');
+        const q = query(phrasesRef, orderBy('createdAt', 'desc'), limit(3));
+        const snapshot = await getDocs(q);
+        const fetched = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        if (fetched.length > 0) {
+          setPhrases(fetched);
+          setCurrentPhrase(fetched[0]);
+        }
+      } catch (err) {
+        console.error("Error fetching phrases:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPhrases();
+  }, []);
+
+  // Auto-rotate
+  useEffect(() => {
+    if (phrases.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentIndex(prev => {
+        const nextIndex = (prev + 1) % phrases.length;
+        setCurrentPhrase(phrases[nextIndex]);
+        return nextIndex;
+      });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [phrases]);
+
+  const goToPhrase = (i) => {
+    setCurrentIndex(i);
+    setCurrentPhrase(phrases[i]);
+  };
+
+  const goToPrevious = () => {
+    const i = currentIndex === 0 ? phrases.length - 1 : currentIndex - 1;
+    goToPhrase(i);
+  };
+
+  const goToNext = () => {
+    const i = (currentIndex + 1) % phrases.length;
+    goToPhrase(i);
+  };
+
   return (
     <div className="min-h-screen bg-[#FFCC99] text-gray-800 font-khand">
       {/* Hero Section */}
@@ -15,35 +78,68 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center max-w-3xl"
+            className="text-center max-w-3xl w-full relative"
           >
-            <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white font-khand">संस्कृतं वद आधुनिको भव
-            </h1>
-            <p className="text-2xl text-white mb-8 font-khand font-semibold">Speak Sanskrit and be modern</p>
+            <AnimatePresence mode="wait">
+              <motion.h1
+                key={currentIndex + "-sanskrit"}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.5 }}
+                className="text-5xl md:text-6xl font-bold mb-4 text-white font-khand"
+              >
+                {loading ? "Loading..." : currentPhrase.sanskrit}
+              </motion.h1>
+            </AnimatePresence>
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={currentIndex + "-english"}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-2xl text-white mb-12 font-khand font-semibold"
+              >
+                {loading ? "..." : currentPhrase.english}
+              </motion.p>
+            </AnimatePresence>
+
+            {phrases.length > 1 && (
+              <>
+                <button onClick={goToPrevious} className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 p-2 rounded-full text-white transition-colors md:left-[-50px]">
+                  <FaChevronLeft />
+                </button>
+                <button onClick={goToNext} className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 p-2 rounded-full text-white transition-colors md:right-[-50px]">
+                  <FaChevronRight />
+                </button>
+                <div className="flex justify-center mt-4 space-x-2">
+                  {phrases.map((_, i) => (
+                    <button key={i} onClick={() => goToPhrase(i)} className={`h-2 rounded-full transition-all ${currentIndex === i ? "w-6 bg-white" : "w-2 bg-white/50 hover:bg-white/80"}`} />
+                  ))}
+                </div>
+              </>
+            )}
           </motion.div>
         </div>
       </div>
 
-      {/* Mission Statement */}
-      <div className="container mx-auto px-4 py-16">
+      {/* Mission Section */}
+      <div className="container mx-auto px-4 py-16 text-center max-w-4xl">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="max-w-4xl mx-auto text-center"
         >
           <h2 className="text-3xl font-bold mb-6 font-khand text-amber-800">Our Sanskrit Mission</h2>
-          <p className="text-lg mb-8 leading-relaxed text-gray-700">
-            Sanskrit is not merely a language; it is the key to unlocking millennia of wisdom, spirituality, and cultural heritage.
-            Our mission is to make this divine language accessible to all, preserving its timeless beauty while connecting it with modern hearts and minds.
-            Through this journey of learning, we aim to create a bridge between ancient knowledge and contemporary understanding,
-            allowing the profound insights of Sanskrit literature to illuminate our path forward.
+          <p className="text-lg leading-relaxed text-gray-700">
+            Sanskrit is not merely a language; it is the key to unlocking millennia of wisdom, spirituality, and cultural heritage...
           </p>
           <div className="w-24 h-1 bg-amber-500 mx-auto my-8"></div>
         </motion.div>
       </div>
 
-      {/* Navigation Section */}
+      {/* Navigation Tiles */}
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {[
@@ -60,11 +156,11 @@ const Home = () => {
               transition={{ delay: 0.1 * index, duration: 0.5 }}
             >
               <Link to={item.path} className="block group">
-                <div className="text-center p-6 bg-white/70 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg hover:transform hover:scale-105">
-                  <div className="text-4xl mb-4 text-amber-600 group-hover:text-amber-700">{item.icon}</div>
-                  <h3 className="text-2xl font-bold mb-2 font-khand text-amber-800 group-hover:text-amber-900">{item.title}</h3>
-                  <div className="w-12 h-0.5 bg-amber-300 mx-auto my-3 group-hover:w-16 transition-all duration-300"></div>
-                  <p className="text-gray-600 font-khand">{item.desc}</p>
+                <div className="text-center p-6 bg-white/70 rounded-lg shadow-md hover:scale-105 transition-all">
+                  <div className="text-4xl mb-4 text-amber-600">{item.icon}</div>
+                  <h3 className="text-2xl font-bold text-amber-800 mb-2">{item.title}</h3>
+                  <div className="w-12 h-0.5 bg-amber-300 mx-auto my-3 group-hover:w-16 transition-all"></div>
+                  <p className="text-gray-600">{item.desc}</p>
                 </div>
               </Link>
             </motion.div>
@@ -72,7 +168,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Footer Quote */}
+      {/* Footer */}
       <div className="container mx-auto px-4 py-16 text-center">
         <blockquote className="italic text-lg text-gray-700 max-w-2xl mx-auto font-khand">
           "भाषासु मुख्या मधुरा दिव्या गीर्वाणभारती" <br />
@@ -82,42 +178,18 @@ const Home = () => {
         </blockquote>
       </div>
 
-      {/* Footer */}
       <footer className="bg-amber-900/10 mt-16 py-8 px-4">
-        <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row md:justify-center justify-between items-center">
-            {/* <div className="mb-6 md:mb-0">
-              <h3 className="text-2xl font-bold text-amber-800 mb-2">Sanskrit Learning</h3>
-              <p className="text-gray-700">Preserving ancient wisdom for modern minds</p>
-            </div> */}
-            <div className="flex flex-col items-center md:items-center">
-              <div className="flex space-x-4 mb-4 items-center">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:text-amber-900 transition-colors">
-                  <FaFacebook size={35} />
-                </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:text-amber-900 transition-colors">
-                  <FaTwitter size={35} />
-                </a>
-                <a href="https://www.instagram.com/mission_sanskrit?igsh=MTE5MWZ5bzlyd2UxYQ==" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:text-amber-900 transition-colors">
-                  <FaInstagram size={35} />
-                </a>
-                <a href="https://youtube.com/channel/UCY0l-Wx0tEW8XOlpz7P6vyQ?si=6-KECPN9VHTK51CW" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:text-amber-900 transition-colors">
-                  <FaYoutube size={35} />
-                </a>
-                <a href="https://whatsapp.com/channel/0029Vb1AsmV9hXF5iupoGI3d" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:text-amber-900 transition-colors">
-                  <FaWhatsapp size={35} />
-                </a>
-                <Link to="/contact" className="text-amber-900 font-bold hover:text-amber-700 transition-colors underline ">
-                  Contact Us
-                </Link>
-              </div>
-
-            </div>
+        <div className="container mx-auto text-center">
+          <div className="flex justify-center space-x-4 mb-4">
+            <a href="https://facebook.com" target="_blank" rel="noreferrer"><FaFacebook size={30} className="text-amber-700 hover:text-amber-900" /></a>
+            <a href="https://twitter.com" target="_blank" rel="noreferrer"><FaTwitter size={30} className="text-amber-700 hover:text-amber-900" /></a>
+            <a href="https://www.instagram.com/mission_sanskrit" target="_blank" rel="noreferrer"><FaInstagram size={30} className="text-amber-700 hover:text-amber-900" /></a>
+            <a href="https://youtube.com/channel/UCY0l-Wx0tEW8XOlpz7P6vyQ" target="_blank" rel="noreferrer"><FaYoutube size={30} className="text-amber-700 hover:text-amber-900" /></a>
+            <a href="https://whatsapp.com/channel/0029Vb1AsmV9hXF5iupoGI3d" target="_blank" rel="noreferrer"><FaWhatsapp size={30} className="text-amber-700 hover:text-amber-900" /></a>
+            <Link to="/contact" className="font-bold text-amber-900 underline hover:text-amber-700">Contact Us</Link>
           </div>
-          <div className="w-full h-px bg-amber-300/50 my-6"></div>
-          <div className="text-center text-gray-700">
-            <p>© {new Date().getFullYear()} Sanskrit Learning. All rights reserved.</p>
-          </div>
+          <hr className="my-6 border-amber-300/50" />
+          <p className="text-gray-700">© {new Date().getFullYear()} Sanskrit Learning. All rights reserved.</p>
         </div>
       </footer>
     </div>
