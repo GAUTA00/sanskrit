@@ -4,8 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube, FaWhatsapp, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { collection, getDocs, query, orderBy, limit, getFirestore } from 'firebase/firestore';
 import { getApp } from 'firebase/app';
+import { firestore } from '../firebase/config';
 
-const db = getFirestore(getApp());
+// const db = getFirestore(getApp());
 
 const Home = () => {
   const [currentPhrase, setCurrentPhrase] = useState({
@@ -20,7 +21,7 @@ const Home = () => {
   useEffect(() => {
     const fetchPhrases = async () => {
       try {
-        const phrasesRef = collection(db, 'phrases');
+        const phrasesRef = collection(firestore, 'phrases');
         const q = query(phrasesRef, orderBy('createdAt', 'desc'), limit(3));
         const snapshot = await getDocs(q);
         const fetched = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
