@@ -91,23 +91,23 @@ const Home = () => {
               <p className="text-gray-700">Preserving ancient wisdom for modern minds</p>
             </div> */}
             <div className="flex flex-col items-center md:items-center">
-              <div className="flex space-x-4 mb-4">
+              <div className="flex space-x-4 mb-4 items-center">
                 <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:text-amber-900 transition-colors">
-                  <FaFacebook size={26} />
+                  <FaFacebook size={35} />
                 </a>
                 <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:text-amber-900 transition-colors">
-                  <FaTwitter size={24} />
+                  <FaTwitter size={35} />
                 </a>
                 <a href="https://www.instagram.com/mission_sanskrit?igsh=MTE5MWZ5bzlyd2UxYQ==" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:text-amber-900 transition-colors">
-                  <FaInstagram size={24} />
+                  <FaInstagram size={35} />
                 </a>
                 <a href="https://youtube.com/channel/UCY0l-Wx0tEW8XOlpz7P6vyQ?si=6-KECPN9VHTK51CW" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:text-amber-900 transition-colors">
-                  <FaYoutube size={24} />
+                  <FaYoutube size={35} />
                 </a>
                 <a href="https://whatsapp.com/channel/0029Vb1AsmV9hXF5iupoGI3d" target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:text-amber-900 transition-colors">
-                  <FaWhatsapp size={24} />
+                  <FaWhatsapp size={35} />
                 </a>
-                <Link to="/contact" className="text-amber-800 font-bold hover:text-amber-700 transition-colors underline">
+                <Link to="/contact" className="text-amber-900 font-bold hover:text-amber-700 transition-colors underline ">
                   Contact Us
                 </Link>
               </div>
