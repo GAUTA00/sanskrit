@@ -30,7 +30,7 @@ const Navbar = () => {
             className="flex items-center group-hover:opacity-90 transition-opacity"
           >
             <img
-              src="public\missionsanskritClaude.svg"
+              src="missionsanskritClaude.svg"
               alt="Mission संस्कृत"
               className="h-12 md:h-14"
 
