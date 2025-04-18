@@ -5,7 +5,7 @@ import { FaFacebook, FaTwitter, FaInstagram, FaYoutube, FaWhatsapp, FaChevronLef
 import { collection, getDocs, query, orderBy, limit, getFirestore } from 'firebase/firestore';
 import { getApp } from 'firebase/app';
 import { firestore } from '../firebase/config';
-
+import TestimonialCarousel from './TestimonialCarousel'; // Assuming you have a TestimonialCarousel component
 // const db = getFirestore(getApp());
 
 const Home = () => {
@@ -73,7 +73,7 @@ const Home = () => {
       {/* Hero Section */}
       <div className="relative h-96 overflow-hidden bg-cover bg-center"
         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1605188076067-8f8bd035b0f0?q=80&w=1200')" }}>
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div className="absolute inset-0 bg-[#2F5D71] bg-opacity-80"></div>
         <div className="container mx-auto px-4 h-full flex items-center justify-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -166,6 +166,26 @@ const Home = () => {
               </Link>
             </motion.div>
           ))}
+        </div>
+      </div>
+
+      {/* Testimonials Section */}
+      <div className="bg-amber-900/10 py-16 mt-16">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold font-khand text-amber-800">What Our Students Say</h2>
+            <div className="w-24 h-1 bg-amber-500 mx-auto my-4"></div>
+            <p className="text-gray-700 max-w-2xl mx-auto">
+              Discover how Sanskrit learning has transformed the lives of our community members
+            </p>
+          </motion.div>
+
+          <TestimonialCarousel />
         </div>
       </div>
 
