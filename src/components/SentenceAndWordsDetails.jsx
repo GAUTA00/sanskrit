@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { firestore } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 import { FaArrowLeft } from "react-icons/fa";
+import Loader from "./common/Loader";
 
 const WordSentenceDetail = () => {
     const { id } = useParams();
@@ -33,12 +34,8 @@ const WordSentenceDetail = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#F7F7F7] flex items-center justify-center">
-                <div className="relative w-24 h-24">
-                    <div className="absolute top-0 w-full h-full border-4 border-[#E3DBC2] rounded-full animate-ping opacity-75"></div>
-                    <div className="w-full h-full border-4 border-t-[#F18056] border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
-                    <p className="absolute inset-0 flex items-center justify-center font-khand text-[#2F5D71]">Loading</p>
-                </div>
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <Loader size="large" />
             </div>
         );
     }

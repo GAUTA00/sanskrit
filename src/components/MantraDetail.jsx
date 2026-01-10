@@ -3,7 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { firestore } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaMusic } from "react-icons/fa";
+import Loader from "./common/Loader";
 
 const MantraDetail = () => {
   const { id } = useParams();
@@ -33,12 +34,8 @@ const MantraDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F7F7F7] flex items-center justify-center">
-        <div className="relative w-24 h-24">
-          <div className="absolute top-0 w-full h-full border-4 border-[#E3DBC2] rounded-full animate-ping opacity-75"></div>
-          <div className="w-full h-full border-4 border-t-[#F18056] border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
-          <p className="absolute inset-0 flex items-center justify-center font-khand text-[#2F5D71]">Loading</p>
-        </div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader size="large" />
       </div>
     );
   }
@@ -118,51 +115,61 @@ const MantraDetail = () => {
 
           {/* Content */}
           <div className="p-6 md:p-8">
-            <div className="w-16 h-1 bg-[#F18056] mb-6"></div>
+            <div className="w-16 h-1 bg-secondary mb-6"></div>
 
             {/* Mantra text */}
-            <motion.h2
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-2xl md:text-3xl font-bold text-[#2F5D71] mb-6 font-khand leading-tight"
+              className="text-center mb-8"
             >
-              {mantra.text}
-            </motion.h2>
+              <h2 className="text-3xl md:text-5xl font-bold text-primary mb-6 font-khand leading-tight">
+                {mantra.text}
+              </h2>
+              {mantra.translation && (
+                <p className="text-xl text-primary/80 italic text-center font-mukta text-secondary">
+                  "{mantra.translation}"
+                </p>
+              )}
+            </motion.div>
 
-            {/* Explanation */}
+            {/* Explanation / Purport */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="prose prose-lg max-w-none"
+              className="prose prose-lg max-w-none text-primary/80 font-khand"
             >
-              <p className="text-lg text-[#2F5D71]/80 font-khand leading-relaxed whitespace-pre-line">
+              <h3 className="text-xl font-bold text-primary mb-4 font-khand border-l-4 border-secondary pl-3">Purport</h3>
+              <p className="text-lg leading-relaxed whitespace-pre-line">
                 {mantra.explanation}
               </p>
             </motion.div>
 
             {/* Benefits section (if available) */}
             {mantra.benefits && (
-              <div className="mt-8 p-4 bg-[#E3DBC2]/30 rounded-lg">
-                <h3 className="text-[#2F5D71] font-bold mb-2 font-khand">Benefits</h3>
-                <p className="text-[#2F5D71]/80 font-khand">{mantra.benefits}</p>
+              <div className="mt-8 p-6 bg-accent/20 rounded-xl border border-accent/50">
+                <h3 className="text-primary font-bold mb-3 font-khand flex items-center">
+                  Benefits
+                </h3>
+                <p className="text-primary/90 font-khand leading-relaxed">{mantra.benefits}</p>
               </div>
             )}
 
             {/* How to chant section (if available) */}
             {mantra.howToChant && (
-              <div className="mt-6 p-4 border-l-4 border-[#F18056] bg-[#F7F7F7]">
-                <h3 className="text-[#2F5D71] font-bold mb-2 font-khand">How to Chant</h3>
-                <p className="text-[#2F5D71]/80 font-khand">{mantra.howToChant}</p>
+              <div className="mt-6 p-6 bg-secondary/5 rounded-xl border-l-4 border-secondary">
+                <h3 className="text-primary font-bold mb-2 font-khand">How to Chant</h3>
+                <p className="text-primary/80 font-khand">{mantra.howToChant}</p>
               </div>
             )}
 
             {/* Audio player (if available) */}
             {mantra.audioUrl && (
-              <div className="mt-8 p-4 bg-[#E3DBC2]/30 rounded-lg">
-                <h3 className="text-[#2F5D71] font-bold mb-2 font-khand">Listen to the Chant</h3>
-                <audio controls className="w-full">
+              <div className="mt-8 p-4 bg-accent/30 rounded-lg">
+                <h3 className="text-primary font-bold mb-2 font-khand">Listen to the Chant</h3>
+                <audio controls className="w-full rounded-md shadow-sm">
                   <source src={mantra.audioUrl} type="audio/mpeg" />
                   Your browser does not support the audio element.
                 </audio>
@@ -170,13 +177,13 @@ const MantraDetail = () => {
             )}
 
             {/* Metadata */}
-            <div className="mt-8 pt-6 border-t border-[#E3DBC2]">
+            <div className="mt-8 pt-6 border-t border-accent">
               <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-[#F18056]/10 text-[#F18056] rounded-full text-sm font-khand">
+                <span className="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-sm font-khand">
                   Sacred Mantra
                 </span>
                 {mantra.category && (
-                  <span className="px-3 py-1 bg-[#E3DBC2] text-[#2F5D71] rounded-full text-sm font-khand">
+                  <span className="px-3 py-1 bg-accent text-primary rounded-full text-sm font-khand">
                     {mantra.category}
                   </span>
                 )}

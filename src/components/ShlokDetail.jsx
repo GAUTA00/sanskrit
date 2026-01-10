@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { firestore } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 import { FaArrowLeft } from "react-icons/fa";
+import Loader from "./common/Loader";
 
 const ShlokDetail = () => {
   const { id } = useParams();
@@ -33,12 +34,8 @@ const ShlokDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F7F7F7] flex items-center justify-center">
-        <div className="relative w-24 h-24">
-          <div className="absolute top-0 w-full h-full border-4 border-[#E3DBC2] rounded-full animate-ping opacity-75"></div>
-          <div className="w-full h-full border-4 border-t-[#F18056] border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
-          <p className="absolute inset-0 flex items-center justify-center font-khand text-[#2F5D71]">Loading</p>
-        </div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader size="large" />
       </div>
     );
   }
@@ -120,7 +117,7 @@ const ShlokDetail = () => {
 
           {/* Content */}
           <div className="p-6 md:p-8">
-            <div className="w-16 h-1 bg-[#F18056] mb-6"></div>
+            <div className="w-16 h-1 bg-secondary mb-6"></div>
 
             {/* Full shlok text */}
             <motion.div
@@ -129,52 +126,57 @@ const ShlokDetail = () => {
               transition={{ delay: 0.2, duration: 0.5 }}
               className="mb-8"
             >
-              <div className="p-4 bg-[#E3DBC2]/20 rounded-lg border-l-4 border-[#F18056]">
-                <h2 className="text-xl md:text-2xl font-bold text-[#2F5D71] mb-3 font-khand leading-relaxed">
+              <div className="p-6 bg-accent/20 rounded-lg border-l-4 border-secondary">
+                <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4 font-khand leading-relaxed text-center">
                   {shlok.text}
                 </h2>
+                {shlok.translation && (
+                  <p className="text-lg text-primary/80 italic text-center border-t border-accent pt-4 mt-2">
+                    "{shlok.translation}"
+                  </p>
+                )}
               </div>
             </motion.div>
 
-            {/* Explanation */}
+            {/* Purport / Explanation */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="prose prose-lg max-w-none"
+              className="prose prose-lg max-w-none text-primary/80 font-khand"
             >
-              <h3 className="text-xl font-bold text-[#2F5D71] mb-4 font-khand">Meaning</h3>
-              <p className="text-lg text-[#2F5D71]/80 font-khand leading-relaxed whitespace-pre-line">
+              <h3 className="text-xl font-bold text-primary mb-4 font-khand">Purport</h3>
+              <div className="whitespace-pre-line leading-relaxed">
                 {shlok.explanation}
-              </p>
+              </div>
             </motion.div>
 
             {/* Additional interpretation (if available) */}
             {shlok.interpretation && (
               <div className="mt-8">
-                <h3 className="text-xl font-bold text-[#2F5D71] mb-4 font-khand">Interpretation</h3>
-                <p className="text-lg text-[#2F5D71]/80 font-khand leading-relaxed whitespace-pre-line">
+                <h3 className="text-xl font-bold text-primary mb-4 font-khand">Interpretation</h3>
+                <p className="text-lg text-primary/80 font-khand leading-relaxed whitespace-pre-line">
                   {shlok.interpretation}
                 </p>
               </div>
             )}
 
-            {/* Source (if available) */}
-            {shlok.source && (
-              <div className="mt-8 p-4 bg-[#E3DBC2]/30 rounded-lg">
-                <h3 className="text-[#2F5D71] font-bold mb-2 font-khand">Source</h3>
-                <p className="text-[#2F5D71]/80 font-khand">{shlok.source}</p>
+            {/* Source (if available) - checking both 'source' and 'reference' fields */}
+            {(shlok.source || shlok.reference) && (
+              <div className="mt-8 p-4 bg-accent/30 rounded-lg">
+                <h3 className="text-primary font-bold mb-2 font-khand">Source</h3>
+                <p className="text-primary/80 font-khand">{shlok.source || shlok.reference}</p>
               </div>
             )}
 
             {/* Category tags */}
-            <div className="mt-8 pt-6 border-t border-[#E3DBC2]">
+            <div className="mt-8 pt-6 border-t border-accent">
               <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-[#F18056]/10 text-[#F18056] rounded-full text-sm font-khand">
+                <span className="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-sm font-khand">
                   Sanskrit Shlok
                 </span>
                 {shlok.category && (
-                  <span className="px-3 py-1 bg-[#E3DBC2] text-[#2F5D71] rounded-full text-sm font-khand">
+                  <span className="px-3 py-1 bg-accent text-primary rounded-full text-sm font-khand">
                     {shlok.category}
                   </span>
                 )}

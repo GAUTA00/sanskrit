@@ -16,6 +16,7 @@ const ManageShlok = () => {
     // Form State
     const [formData, setFormData] = useState({
         text: '',
+        translation: '',
         explanation: '',
         imageData: null
     });
@@ -59,6 +60,7 @@ const ManageShlok = () => {
                 const docRef = doc(firestore, 'shlok', currentShlok.id);
                 await updateDoc(docRef, {
                     text: formData.text,
+                    translation: formData.translation || '',
                     explanation: formData.explanation,
                     imageData: formData.imageData, // Update image only if changed? Logic below handles it
                     // timestamp: serverTimestamp() // Optional: update timestamp
@@ -67,6 +69,7 @@ const ManageShlok = () => {
                 // Create
                 await addDoc(collectionRef, {
                     text: formData.text,
+                    translation: formData.translation || '',
                     explanation: formData.explanation,
                     imageData: formData.imageData,
                     timestamp: serverTimestamp()
@@ -98,6 +101,7 @@ const ManageShlok = () => {
         setCurrentShlok(shlok);
         setFormData({
             text: shlok.text,
+            translation: shlok.translation || '',
             explanation: shlok.explanation,
             imageData: shlok.imageData
         });
@@ -106,7 +110,7 @@ const ManageShlok = () => {
 
     const resetForm = () => {
         setCurrentShlok(null);
-        setFormData({ text: '', explanation: '', imageData: null });
+        setFormData({ text: '', translation: '', explanation: '', imageData: null });
     };
 
     if (loading && !isModalOpen) return <div className="flex justify-center mt-10"><Loader /></div>;
@@ -132,7 +136,8 @@ const ManageShlok = () => {
                         </div>
                         <CardContent>
                             <h3 className="text-xl font-bold text-primary font-khand mb-2 truncate">{shlok.text}</h3>
-                            <p className="text-gray-600 text-sm font-khand line-clamp-3 mb-4">{shlok.explanation}</p>
+                            <p className="text-gray-600 text-sm font-khand line-clamp-2 mb-2 italic">{shlok.translation}</p>
+                            <p className="text-gray-500 text-xs font-khand line-clamp-2 mb-4">{shlok.explanation}</p>
 
                             <div className="flex space-x-2 mt-auto">
                                 <Button variant="outline" className="text-sm px-3 py-1" onClick={() => openEditModal(shlok)}>
@@ -179,7 +184,7 @@ const ManageShlok = () => {
                                 />
 
                                 <Input
-                                    label="Shlok Text"
+                                    label="Shlok Text (Sanskrit)"
                                     value={formData.text}
                                     onChange={(e) => setFormData({ ...formData, text: e.target.value })}
                                     placeholder="Enter the Sanskrit Shlok"
@@ -187,11 +192,19 @@ const ManageShlok = () => {
                                 />
 
                                 <Input
-                                    label="Explanation"
+                                    label="Translation (English/Hindi)"
+                                    value={formData.translation}
+                                    onChange={(e) => setFormData({ ...formData, translation: e.target.value })}
+                                    placeholder="Enter the literal translation"
+                                    required
+                                />
+
+                                <Input
+                                    label="Purport/Explanation"
                                     rows={4}
                                     value={formData.explanation}
                                     onChange={(e) => setFormData({ ...formData, explanation: e.target.value })}
-                                    placeholder="Enter the meaning/explanation"
+                                    placeholder="Enter the detailed meaning or philosophical explanation"
                                     required
                                 />
 

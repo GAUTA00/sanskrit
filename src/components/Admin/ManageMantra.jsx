@@ -15,6 +15,7 @@ const ManageMantra = () => {
 
     const [formData, setFormData] = useState({
         text: '',
+        translation: '',
         explanation: '',
         imageData: null
     });
@@ -57,12 +58,14 @@ const ManageMantra = () => {
                 const docRef = doc(firestore, 'mantra', currentMantra.id);
                 await updateDoc(docRef, {
                     text: formData.text,
+                    translation: formData.translation || '',
                     explanation: formData.explanation,
                     imageData: formData.imageData,
                 });
             } else {
                 await addDoc(collectionRef, {
                     text: formData.text,
+                    translation: formData.translation || '',
                     explanation: formData.explanation,
                     imageData: formData.imageData,
                     timestamp: serverTimestamp()
@@ -94,6 +97,7 @@ const ManageMantra = () => {
         setCurrentMantra(mantra);
         setFormData({
             text: mantra.text,
+            translation: mantra.translation || '',
             explanation: mantra.explanation,
             imageData: mantra.imageData
         });
@@ -102,7 +106,7 @@ const ManageMantra = () => {
 
     const resetForm = () => {
         setCurrentMantra(null);
-        setFormData({ text: '', explanation: '', imageData: null });
+        setFormData({ text: '', translation: '', explanation: '', imageData: null });
     };
 
     if (loading && !isModalOpen) return <div className="flex justify-center mt-10"><Loader /></div>;
@@ -128,7 +132,8 @@ const ManageMantra = () => {
                         </div>
                         <CardContent>
                             <h3 className="text-xl font-bold text-primary font-khand mb-2 truncate">{mantra.text}</h3>
-                            <p className="text-gray-600 text-sm font-khand line-clamp-3 mb-4">{mantra.explanation}</p>
+                            <p className="text-gray-600 text-sm font-khand line-clamp-2 mb-2 italic">{mantra.translation}</p>
+                            <p className="text-gray-500 text-xs font-khand line-clamp-2 mb-4">{mantra.explanation}</p>
 
                             <div className="flex space-x-2 mt-auto">
                                 <Button variant="outline" className="text-sm px-3 py-1" onClick={() => openEditModal(mantra)}>
@@ -174,7 +179,7 @@ const ManageMantra = () => {
                                 />
 
                                 <Input
-                                    label="Mantra Text"
+                                    label="Mantra Text (Sanskrit)"
                                     value={formData.text}
                                     onChange={(e) => setFormData({ ...formData, text: e.target.value })}
                                     placeholder="Enter the Sanskrit Mantra"
@@ -182,11 +187,19 @@ const ManageMantra = () => {
                                 />
 
                                 <Input
-                                    label="Explanation"
+                                    label="Translation (English/Hindi)"
+                                    value={formData.translation}
+                                    onChange={(e) => setFormData({ ...formData, translation: e.target.value })}
+                                    placeholder="Enter the literal translation"
+                                    required
+                                />
+
+                                <Input
+                                    label="Purport/Explanation"
                                     rows={4}
                                     value={formData.explanation}
                                     onChange={(e) => setFormData({ ...formData, explanation: e.target.value })}
-                                    placeholder="Enter the meaning/explanation"
+                                    placeholder="Enter the detailed meaning or philosophical explanation"
                                     required
                                 />
 

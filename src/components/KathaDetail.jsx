@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { firestore } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 import { FaArrowLeft, FaBookOpen } from "react-icons/fa";
+import Loader from "./common/Loader";
 
 const KathaDetail = () => {
   const { id } = useParams();
@@ -32,12 +33,8 @@ const KathaDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F7F7F7] flex items-center justify-center">
-        <div className="relative w-24 h-24">
-          <div className="absolute top-0 w-full h-full border-4 border-[#E3DBC2] rounded-full animate-ping opacity-75"></div>
-          <div className="w-full h-full border-4 border-t-[#F18056] border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
-          <p className="absolute inset-0 flex items-center justify-center font-khand text-[#2F5D71]">Loading</p>
-        </div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader size="large" />
       </div>
     );
   }
@@ -118,46 +115,53 @@ const KathaDetail = () => {
 
           {/* Content */}
           <div className="p-6 md:p-8">
-            <div className="w-16 h-1 bg-[#F18056] mb-6"></div>
+            <div className="w-16 h-1 bg-secondary mb-6"></div>
 
             {/* Story title */}
             <motion.h2
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-2xl md:text-3xl font-bold text-[#2F5D71] mb-6 font-khand leading-tight"
+              className="text-2xl md:text-3xl font-bold text-primary mb-6 font-khand leading-tight"
             >
               {katha.text}
             </motion.h2>
+
+            {/* Story summary (if available, mostly for context or meta desc, but can show here too) */}
+            {katha.summary && (
+              <div className="mb-6 text-lg text-primary/70 font-khand italic border-l-4 border-accent pl-4">
+                {katha.summary}
+              </div>
+            )}
 
             {/* Story content */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="prose prose-lg max-w-none"
+              className="prose prose-lg max-w-none text-primary/80 font-khand"
             >
-              <p className="text-lg text-[#2F5D71]/80 font-khand leading-relaxed whitespace-pre-line">
+              <div className="whitespace-pre-line leading-relaxed">
                 {katha.explanation}
-              </p>
+              </div>
             </motion.div>
 
             {/* Moral of the story (if available) */}
             {katha.moral && (
-              <div className="mt-8 p-4 bg-[#E3DBC2]/30 rounded-lg">
-                <h3 className="text-[#2F5D71] font-bold mb-2 font-khand">Moral of the Story</h3>
-                <p className="text-[#2F5D71]/80 font-khand">{katha.moral}</p>
+              <div className="mt-8 p-6 bg-accent/20 rounded-xl border border-accent">
+                <h3 className="text-secondary font-bold mb-2 font-khand text-xl">Moral of the Story</h3>
+                <p className="text-primary font-khand text-lg">{katha.moral}</p>
               </div>
             )}
 
             {/* Metadata */}
-            <div className="mt-8 pt-6 border-t border-[#E3DBC2]">
+            <div className="mt-8 pt-6 border-t border-accent">
               <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-[#F18056]/10 text-[#F18056] rounded-full text-sm font-khand">
+                <span className="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-sm font-khand">
                   Sanskrit Katha
                 </span>
                 {katha.category && (
-                  <span className="px-3 py-1 bg-[#E3DBC2] text-[#2F5D71] rounded-full text-sm font-khand">
+                  <span className="px-3 py-1 bg-accent/50 text-primary rounded-full text-sm font-khand">
                     {katha.category}
                   </span>
                 )}

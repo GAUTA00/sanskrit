@@ -15,6 +15,7 @@ const ManageKatha = () => {
 
     const [formData, setFormData] = useState({
         text: '',
+        summary: '',
         explanation: '',
         imageData: null
     });
@@ -57,12 +58,14 @@ const ManageKatha = () => {
                 const docRef = doc(firestore, 'katha', currentKatha.id);
                 await updateDoc(docRef, {
                     text: formData.text,
+                    summary: formData.summary || '',
                     explanation: formData.explanation,
                     imageData: formData.imageData,
                 });
             } else {
                 await addDoc(collectionRef, {
                     text: formData.text,
+                    summary: formData.summary || '',
                     explanation: formData.explanation,
                     imageData: formData.imageData,
                     timestamp: serverTimestamp()
@@ -94,6 +97,7 @@ const ManageKatha = () => {
         setCurrentKatha(katha);
         setFormData({
             text: katha.text,
+            summary: katha.summary || '',
             explanation: katha.explanation,
             imageData: katha.imageData
         });
@@ -102,7 +106,7 @@ const ManageKatha = () => {
 
     const resetForm = () => {
         setCurrentKatha(null);
-        setFormData({ text: '', explanation: '', imageData: null });
+        setFormData({ text: '', summary: '', explanation: '', imageData: null });
     };
 
     if (loading && !isModalOpen) return <div className="flex justify-center mt-10"><Loader /></div>;
@@ -128,7 +132,9 @@ const ManageKatha = () => {
                         </div>
                         <CardContent>
                             <h3 className="text-xl font-bold text-primary font-khand mb-2 truncate">{katha.text}</h3>
-                            <p className="text-gray-600 text-sm font-khand line-clamp-3 mb-4">{katha.explanation}</p>
+                            <p className="text-gray-600 text-sm font-khand line-clamp-3 mb-4">
+                                {katha.summary ? katha.summary : katha.explanation}
+                            </p>
 
                             <div className="flex space-x-2 mt-auto">
                                 <Button variant="outline" className="text-sm px-3 py-1" onClick={() => openEditModal(katha)}>
@@ -182,11 +188,19 @@ const ManageKatha = () => {
                                 />
 
                                 <Input
-                                    label="Story/Description"
-                                    rows={6}
+                                    label="Summary (Short Description)"
+                                    value={formData.summary}
+                                    onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
+                                    placeholder="Enter a brief summary for the card view"
+                                    required
+                                />
+
+                                <Input
+                                    label="Full Story"
+                                    rows={10}
                                     value={formData.explanation}
                                     onChange={(e) => setFormData({ ...formData, explanation: e.target.value })}
-                                    placeholder="Enter the full story or description"
+                                    placeholder="Enter the full story content..."
                                     required
                                 />
 

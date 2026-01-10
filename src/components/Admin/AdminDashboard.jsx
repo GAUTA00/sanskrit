@@ -9,6 +9,7 @@ import ManageKatha from "./ManageKatha";
 import ManageGeet from "./ManageGeet";
 import ManageSentences from "./ManageSentences";
 import ManagePhrases from "./ManagePhrases";
+import Loader from "../common/Loader";
 
 const AdminDashboard = () => {
   const [user, setUser] = useState(null);
@@ -29,7 +30,7 @@ const AdminDashboard = () => {
     return () => unsubscribe();
   }, [navigate]);
 
-  if (loading) return <div className="flex h-screen items-center justify-center"><div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>;
+  if (loading) return <div className="flex h-screen items-center justify-center"><Loader /></div>;
 
   return (
     <div className="flex min-h-screen bg-gray-100">
