@@ -13,33 +13,33 @@ const Navbar = () => {
     { path: "/mantra", label: "मन्त्राणि" },
     { path: "/katha", label: "कथा:" },
     { path: "/geet", label: "गीतमञ्जरी" },
-    // { path: "/hasyakanika", label: "Hasyakanika" },
-    { path: "/sentenceandwords", label: "Sentences & Words" },
+    { path: "/sentenceandwords", label: "शब्दसागरः" },
     { path: "/contact", label: "संपर्कः" },
     { path: "/admin", label: "Admin" }
   ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-gradient-to-r from-amber-100 to-orange-100 py-3 px-6 shadow-md">
-      <div className="container mx-auto flex justify-between items-center">
+    <nav className="sticky top-0 z-50 w-full bg-surface/95 backdrop-blur-sm border-b border-accent/20 shadow-sm transition-all duration-300">
+      <div className="container mx-auto flex justify-between items-center px-6 py-3">
         <Link to="/" className="group flex items-center">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex items-center group-hover:opacity-90 transition-opacity"
+            className="flex items-center group-hover:opacity-80 transition-opacity"
           >
-            <img
+            {/* Logo placeholder if file missing, assumes it exists or uses text as backup */}
+            {/* <img
               src="/logo_mission.svg"
               alt="Mission संस्कृत"
-              className="h-12 md:h-14 rounded-xl lg:ml-16"
-
-            />
+              className="h-10 md:h-12 rounded-xl"
+            /> */}
+            <span className="text-2xl font-khand font-bold text-primary">Sanskrit<span className="text-secondary">Mission</span></span>
           </motion.div>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex space-x-8">
+        <div className="hidden lg:flex space-x-6">
           {navItems.map((item, index) => {
             const isActive = location.pathname === item.path;
             return (
@@ -47,18 +47,18 @@ const Navbar = () => {
                 key={item.path}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * index, duration: 0.4 }}
+                transition={{ delay: 0.05 * index, duration: 0.3 }}
               >
                 <Link
                   to={item.path}
-                  className={`relative px-1 py-2 font-mukta font-bold text-lg ${isActive ? 'text-amber-800' : 'text-amber-700 hover:text-amber-900'
+                  className={`relative px-2 py-1 font-khand font-bold text-lg tracking-wide ${isActive ? 'text-secondary' : 'text-primary hover:text-secondary'
                     } transition-colors duration-200`}
                 >
                   {item.label}
                   {isActive && (
                     <motion.span
                       layoutId="underline"
-                      className="absolute left-0 top-full block h-0.5 w-full bg-amber-500"
+                      className="absolute left-0 top-full block h-0.5 w-full bg-secondary"
                     />
                   )}
                 </Link>
@@ -66,25 +66,19 @@ const Navbar = () => {
             );
           })}
         </div>
-        {/* 
-        Rest of the navbar code remains unchanged */}
 
         {/* Mobile Menu Button */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="md:hidden flex items-center"
+          className="lg:hidden flex items-center"
         >
           <button
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
-            className="p-2 rounded-full bg-amber-200 hover:bg-amber-300 transition-colors"
+            className="p-2 rounded-lg text-primary hover:bg-black/5 transition-colors focus:outline-none"
           >
-            {isOpen ? (
-              <FaTimes className="w-6 h-6 text-amber-800" />
-            ) : (
-              <FaBars className="w-6 h-6 text-amber-800" />
-            )}
+            {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
         </motion.div>
       </div>
@@ -96,17 +90,17 @@ const Navbar = () => {
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3 }}
-          className="md:hidden bg-gradient-to-b from-amber-100 to-orange-100 mt-2 rounded-lg shadow-inner"
+          className="lg:hidden bg-surface border-t border-accent/20 overflow-hidden"
         >
-          <div className="flex flex-col items-center py-4 space-y-3">
+          <div className="flex flex-col py-4 px-6 space-y-2">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
               return (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`py-2 px-4 w-full text-center text-lg font-mukta font-bold ${isActive ? 'text-amber-800 bg-amber-200/50' : 'text-amber-700 hover:bg-amber-200/30'
-                    } transition-colors rounded-md`}
+                  className={`block py-3 px-4 text-center text-lg font-khand font-bold rounded-lg ${isActive ? 'bg-secondary/10 text-secondary' : 'text-primary hover:bg-black/5'
+                    } transition-colors`}
                   onClick={() => setIsOpen(false)}
                 >
                   {item.label}

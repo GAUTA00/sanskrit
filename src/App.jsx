@@ -19,6 +19,7 @@ import KathaDetail from "./components/KathaDetail";
 // import HasyakanikaDetail from "./components/HasyakanikaDetail";
 import SentencesAndWords from "./components/SentencesAndWords";
 import WordSentenceDetail from "./components/SentenceAndWordsDetails";
+import Footer from "./components/Footer";
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -38,40 +39,45 @@ const App = () => {
 
   return (
     <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/shlok" element={<Shlok />} />
-        <Route path="/shlok/:id" element={<ShlokDetail />} />
-        <Route path="/mantra" element={<Mantra />} />
-        <Route path="/mantra/:id" element={<MantraDetail />} />
-        <Route path="/katha" element={<Katha />} />
-        <Route path="/katha/:id" element={<KathaDetail />} />
-        <Route path="/geet" element={<Geet />} />
-        <Route path="/geet/:id" element={<GeetDetail />} /> {/* Ensure this exists */}
-        {/* <Route path="/hasyakanika" element={<Hasyakanika />} /> */}
-        {/* <Route path="/hasyakanika/:id" element={<HasyakanikaDetail />} /> */}
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/shlok" element={<Shlok />} />
+            <Route path="/shlok/:id" element={<ShlokDetail />} />
+            <Route path="/mantra" element={<Mantra />} />
+            <Route path="/mantra/:id" element={<MantraDetail />} />
+            <Route path="/katha" element={<Katha />} />
+            <Route path="/katha/:id" element={<KathaDetail />} />
+            <Route path="/geet" element={<Geet />} />
+            <Route path="/geet/:id" element={<GeetDetail />} /> {/* Ensure this exists */}
+            {/* <Route path="/hasyakanika" element={<Hasyakanika />} /> */}
+            {/* <Route path="/hasyakanika/:id" element={<HasyakanikaDetail />} /> */}
 
-        <Route path="/sentenceandwords" element={<SentencesAndWords />} />
-        <Route path="/sentenceandwords/:id" element={<WordSentenceDetail />} />
+            <Route path="/sentenceandwords" element={<SentencesAndWords />} />
+            <Route path="/sentenceandwords/:id" element={<WordSentenceDetail />} />
 
 
-        {/* Updated Admin Login Route */}
+            {/* Updated Admin Login Route */}
 
-        <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLogin />} />
 
-        {/* Updated Protected Admin Dashboard Route */}
-        <Route
-          path="/admin/dashboard/*"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
+            {/* Updated Protected Admin Dashboard Route */}
+            <Route
+              path="/admin/dashboard/*"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
 
-        <Route path="/contact" element={<ContactUs />} />
-      </Routes>
+            <Route path="/contact" element={<ContactUs />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </Router>
   );
 };

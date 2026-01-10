@@ -6,6 +6,13 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        primary: '#2F5D71',  // Deep Teal/Blue
+        secondary: '#F18056', // Saffron/Orange
+        accent: '#E3DBC2',    // Cream/Beige
+        background: '#F7F7F7', // Off-white
+        surface: '#ffffff',
+      },
       fontFamily: {
         mukta: ['Mukta', 'sans-serif'],
         khand: ['Khand', 'sans-serif'],
