@@ -15,7 +15,6 @@ const Navbar = () => {
     { path: "/geet", label: "गीतमञ्जरी" },
     { path: "/sentenceandwords", label: "शब्दसागरः" },
     { path: "/contact", label: "संपर्कः" },
-    { path: "/admin", label: "Admin" }
   ];
 
   return (
@@ -28,18 +27,12 @@ const Navbar = () => {
             transition={{ duration: 0.5 }}
             className="flex items-center group-hover:opacity-80 transition-opacity"
           >
-            {/* Logo placeholder if file missing, assumes it exists or uses text as backup */}
-            {/* <img
-              src="/logo_mission.svg"
-              alt="Mission संस्कृत"
-              className="h-10 md:h-12 rounded-xl"
-            /> */}
             <span className="text-2xl font-khand font-bold text-primary">Sanskrit<span className="text-secondary">Mission</span></span>
           </motion.div>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex space-x-6">
+        <div className="hidden lg:flex items-center space-x-6">
           {navItems.map((item, index) => {
             const isActive = location.pathname === item.path;
             return (
@@ -65,6 +58,10 @@ const Navbar = () => {
               </motion.div>
             );
           })}
+
+          <Link to="/admin" className="px-4 py-1.5 bg-primary/10 text-primary rounded-full font-khand font-bold hover:bg-primary/20 transition-colors">
+            Admin
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -93,6 +90,7 @@ const Navbar = () => {
           className="lg:hidden bg-surface border-t border-accent/20 overflow-hidden"
         >
           <div className="flex flex-col py-4 px-6 space-y-2">
+
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
               return (
@@ -107,6 +105,13 @@ const Navbar = () => {
                 </Link>
               );
             })}
+            <Link
+              to="/admin"
+              className="block py-3 px-4 text-center text-lg font-khand font-bold rounded-lg text-primary hover:bg-black/5 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Admin Portal
+            </Link>
           </div>
         </motion.div>
       )}

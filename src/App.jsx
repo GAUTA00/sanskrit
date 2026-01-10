@@ -10,6 +10,7 @@ import Geet from "./components/Geet";
 // import Hasyakanika from "./components/Hasyakanika";
 import AdminLogin from "./components/Admin/AdminLogin";
 import AdminDashboard from "./components/Admin/AdminDashboard";
+import Loader from "./components/common/Loader";
 import ContactUs from "./components/ContactUs";
 import { setupAuthListener } from "./firebase/authListener"; // Firebase Auth listener
 import { auth } from "./firebase/config"; // Firebase Auth service
@@ -74,6 +75,8 @@ const App = () => {
             />
 
             <Route path="/contact" element={<ContactUs />} />
+            {/* Redirect any unknown routes to the home page */}
+            <Route path="*" element={<Home />} />
           </Routes>
         </main>
         <Footer />
